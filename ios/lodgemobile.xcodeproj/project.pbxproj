@@ -20,6 +20,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* lodgemobileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* lodgemobileTests.m */; };
 		444FA8C20B9E1528E9DA548E /* libPods-lodgemobile-lodgemobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A007EDA9FB1055B05D137EF0 /* libPods-lodgemobile-lodgemobileTests.a */; };
 		D894C1302471ACEF00B0C9FB /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
+		D894C1322471AF8B00B0C9FB /* assets in Resources */ = {isa = PBXBuildFile; fileRef = D894C1312471AF8B00B0C9FB /* assets */; };
 		F0E46CD193238B5D0C88CA9D /* libPods-lodgemobile-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7CF0662C595F23983D2F06C /* libPods-lodgemobile-tvOSTests.a */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +65,7 @@
 		A07B8E148527612F25192C44 /* Pods-lodgemobile-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lodgemobile-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-lodgemobile-tvOS/Pods-lodgemobile-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		A2B709C2B9C3DCDF76351EAB /* Pods-lodgemobile-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lodgemobile-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-lodgemobile-tvOSTests/Pods-lodgemobile-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D87AA6169CA031097754F79E /* Pods-lodgemobile-lodgemobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lodgemobile-lodgemobileTests.debug.xcconfig"; path = "Target Support Files/Pods-lodgemobile-lodgemobileTests/Pods-lodgemobile-lodgemobileTests.debug.xcconfig"; sourceTree = "<group>"; };
+		D894C1312471AF8B00B0C9FB /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		E4D4DA2F21E8F19DF5205D12 /* Pods-lodgemobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lodgemobile.debug.xcconfig"; path = "Target Support Files/Pods-lodgemobile/Pods-lodgemobile.debug.xcconfig"; sourceTree = "<group>"; };
 		E7CF0662C595F23983D2F06C /* libPods-lodgemobile-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lodgemobile-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -160,6 +162,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				D894C1312471AF8B00B0C9FB /* assets */,
 				13B07FAE1A68108700A75B9A /* lodgemobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* lodgemobileTests */,
@@ -339,6 +342,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D894C1322471AF8B00B0C9FB /* assets in Resources */,
 				D894C1302471ACEF00B0C9FB /* main.jsbundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
