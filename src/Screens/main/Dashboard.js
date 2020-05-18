@@ -23,86 +23,24 @@ class Dashboard extends Component {
     super(props);
 
     this.store = props.userStore;
-
-    // Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
-  }
-
-  static get options() {
-    return {
-      topBar: {
-        visible: true,
-        title: {
-          text: 'Lodge App'
-        },
-      }
-    };
-  }
-
-  state = {
-    user: '',
-    posts: []
+    this.state = {
+      user: '',
+      posts: []
+    }
+  
   }
 
   componentDidMount() {
-    this.getPosts();
+    this.store.getPosts();
   }
 
   goToNewPostScreen = () => {
-    // Navigation.push(this.props.componentId, {
-    //   component: {
-    //     name: 'Client.CreateNewPost',
-    //     passProps: {
-    //       text: 'Pushed screen',
-    //       user: this.props.user,
-    //       token: this.props.token
-    //     },
-    //     options: {
-    //       topBar: {
-    //         visible: true,
-    //         title: {
-    //           text: 'Create New Post'
-    //         },
-    //         rightButtons: [
-    //           {
-    //             id: 'buttonOne',
-    //             systemItem: 'compose'
-    //           }
-    //         ]
-    //       },
-    //       bottomTabs: {
-    //         visible: false
-    //       }
-    //     }
-    //   }
-    // })
-  }
-
-
-  getPosts = () => {
-    const headers = {
-      'x-auth': this.store.token
-    };
-    if (this.store.token) {
-
-      axios.get('https://www.lodge-app.com/api/posts/', {headers: headers}).then((res) => {
-        let postArray = []
-        res.data.forEach((post) => {
-          postArray.push(post);
-        })
-
-        this.setState({posts: postArray});
-      }).catch((err) => {
-        alert('Please ask an officer of your lodge to be added to their members list.');
-      })
-    }
+    this.props.navigation.navigate('CreateNewPost');
   }
 
   render() {
     return (
       <View style={style.container}>
-        <View style={style.topBar}>
-          <Text style={{fontSize: 18, marginTop: 20, fontWeight: 'bold'}}>Lodge App</Text>
-        </View>
         {this.store.user.lodges[0] && (
           <View style={style.createNewPost}>
             <TouchableOpacity style={style.newPostBtn} onPress={this.goToNewPostScreen}>
@@ -110,7 +48,7 @@ class Dashboard extends Component {
             </TouchableOpacity>
           </View>
         )}
-        <LodgePosts user={this.store.user} token={this.store.token} posts={this.state.posts} resetPosts={() => this.getPosts()} />
+        <LodgePosts user={this.store.user} token={this.store.token} posts={this.store.posts} resetPosts={() => this.getPosts()} />
       </View>
     )
   }
@@ -122,14 +60,6 @@ const style = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#f5f7fb'
-  },
-  topBar: {
-    height: 90,
-    width: '100%',
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 30,
   },
   createNewPost: {
     marginTop: 3,

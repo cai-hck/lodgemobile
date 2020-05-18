@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback
 } from 'react-native';
+import { observer, inject } from 'mobx-react';
 
 import FastImage from 'react-native-fast-image'
 
@@ -22,9 +23,13 @@ import Comment from './Comment';
 import TappableImage from '../../../Components/TappableImage/TappableImage';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
+@inject('userStore')
+@observer
 class Post extends Component {
   constructor(props) {
     super(props);
+
+    this.store = props.userStore;
   }
 
   state = {
@@ -42,11 +47,11 @@ class Post extends Component {
 
   deletePost = () => {
     const headers = {
-      'x-auth': this.props.token
+      'x-auth': this.store.token
     };
 
     axios.post(`https://www.lodge-app.com/api/posts/${this.props.post._id}/delete`, {}, {headers: headers} ).then((res) => {
-      this.props.resetPosts();
+      this.store.getPosts();
       this.setState({showOptions: false})
     }).catch((err) => {
       alert('Something went wrong. Maybe you don\'t have permission to do that.');
@@ -55,11 +60,10 @@ class Post extends Component {
 
   likePost = () => {
     const headers = {
-      'x-auth': this.props.token
+      'x-auth': this.store.token
     };
 
     axios.post(`https://www.lodge-app.com/api/posts/${this.props.post._id}/like`, {}, {headers: headers} ).then((res) => {
-      this.props.resetPosts();
       this.setState({showOptions: false, liked: !this.state.liked})
     }).catch((err) => {
       alert('Something went wrong. Maybe you don\'t have permission to do that.');
@@ -69,11 +73,11 @@ class Post extends Component {
 
   updatePost = () => {
     const headers = {
-      'x-auth': this.props.token
+      'x-auth': this.store.token
     };
 
     axios.post(`https://www.lodge-app.com/api/posts/${this.props.post._id}/edit`, {content: this.state.content}, {headers: headers} ).then((res) => {
-      this.props.resetPosts();
+      this.store.getPosts();
       this.setState({editMode: false})
     }).catch((err) => {
       alert('Something went wrong. Maybe you don\'t have permission to do that.');
@@ -83,7 +87,7 @@ class Post extends Component {
 
   likeButton = () => {
     this.props.post.likes.forEach((like) => {
-      if (like.userId == this.props.user._id) {
+      if (like.userId == this.store.user._id) {
         return this.setState({liked: true})
       }
     })
@@ -179,9 +183,9 @@ class Post extends Component {
 
             {this.state.showOptions && (
               <View style={style.options}>
-                {(this.props.user._id === this.props.post.authorId) || (this.props.user.admin)? (
+                {(this.store.user._id === this.props.post.authorId) || (this.store.user.admin)? (
                   <>
-                    {this.props.user._id === this.props.post.authorId ? (
+                    {this.store.user._id === this.props.post.authorId ? (
                       <Text onPress={() => this.setState({editMode: true, showOptions: false})} style={style.optionText}>Edit</Text>
                       ) : (
                       <Text style={style.optionText}>Member Info</Text>
@@ -218,7 +222,7 @@ class Post extends Component {
                 <Comment
                   key={comment._id}
                   comment={comment}
-                  user={this.props.user}
+                  user={this.store.user}
                   token={this.props.token}
                   resetPosts={this.props.resetPosts}
                 />
@@ -229,7 +233,7 @@ class Post extends Component {
           </View>
           {this.state.showReplyBox ? (
                 <ReplyBox 
-                  user={this.props.user}
+                  user={this.store.user}
                   post={this.props.post}
                   index={this.props.index}
                   token={this.props.token}
