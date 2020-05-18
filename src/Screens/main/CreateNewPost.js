@@ -9,29 +9,39 @@ import {
   Modal,
   TouchableOpacity
 } from 'react-native';
-import { Navigation } from 'react-native-navigation';
-import ImagePicker from 'react-native-image-picker'
-import AsyncStorage from '@react-native-community/async-storage';
+import { observer, inject } from 'mobx-react';
+import ImagePicker from 'react-native-image-picker';
 
 import axios from 'axios';
 
+@inject('userStore')
+@observer
 class CreateNewPost extends Component {
   constructor(props) {
     super(props);
-    Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
+
+    this.store = props.userStore;
+
+    this.props.navigation.setOptions({
+      headerRight: () => (
+        <Button onPress={this.navigationButtonPressed} title="Post" />
+      )
+    })
+
+
+    this.state = {
+      content: '',
+      photo: '',
+      loading: false
+    }
   }
 
-  state = {
-    content: '',
-    photo: '',
-    loading: false
-  }
 
   toggleLoading = () => {
     this.setState({loading: !this.state.loading});
   }
 
-  navigationButtonPressed({ buttonId }) {
+  navigationButtonPressed = () => {
     this.toggleLoading();
     const data = new FormData();
     if (this.state.photo.uri) {
@@ -52,7 +62,7 @@ class CreateNewPost extends Component {
     });
   
     const headers = {
-      'x-auth': this.props.token,
+      'x-auth': this.store.token,
       'content-type': 'multipart/form-data'
     }
 
@@ -63,14 +73,8 @@ class CreateNewPost extends Component {
         }
       ).then((res) => {
         this.toggleLoading();
-
-        const details = {
-          alertBody: this.state.content,
-          alertTitle: 'New Post on Lodge App',
-          applicationIconBadgeNumber: 1
-        }
-
-        Navigation.pop(this.props.componentId);
+        this.store.getPosts();
+        this.props.navigation.navigate('Lodge App');
       }).catch((err) => {
         alert(err);
       })
