@@ -12,12 +12,16 @@ import {
 import moment from 'moment';
 import axios from 'axios';
 import FastImage from 'react-native-fast-image'
+import { observer, inject } from 'mobx-react';
 
 import ReplyBox from './ReplyBox';
-
+@inject('userStore')
+@observer
 class Comment extends Component {
   constructor(props) {
     super(props);
+
+    this.store = props.userStore;
   }
 
   state = {
@@ -33,11 +37,11 @@ class Comment extends Component {
 
   deleteComment = () => {
     const headers = {
-      'x-auth': this.props.token
+      'x-auth': this.store.token
     };
 
     axios.post(`https://www.lodge-app.com/api/comments/${this.props.comment._id}/delete`, {}, {headers: headers} ).then((res) => {
-      this.props.resetPosts();
+      this.store.getPosts();
       this.setState({showOptions: false})
     }).catch((err) => {
       alert('Something went wrong. Maybe you don\'t have permission to do that.');
@@ -46,11 +50,11 @@ class Comment extends Component {
 
   updateContent = () => {
     const headers = {
-      'x-auth': this.props.token
+      'x-auth': this.store.token
     };
 
     axios.post(`https://www.lodge-app.com/api/comments/${this.props.comment._id}/edit`, {content: this.state.content}, {headers: headers} ).then((res) => {
-      this.props.resetPosts();
+      this.store.getPosts();
       this.setState({editMode: false})
     }).catch((err) => {
       alert('Something went wrong. Maybe you don\'t have permission to do that.');
@@ -61,11 +65,11 @@ class Comment extends Component {
 
   likeComment = () => {
     const headers = {
-      'x-auth': this.props.token
+      'x-auth': this.store.token
     };
 
     axios.post(`https://www.lodge-app.com/api/comments/${this.props.comment._id}/like`, {}, {headers: headers} ).then((res) => {
-      this.props.resetPosts();
+      this.store.getPosts();
       this.setState({showOptions: false, liked: !this.state.liked})
     }).catch((err) => {
       alert('Something went wrong. Maybe you don\'t have permission to do that.');
@@ -74,7 +78,7 @@ class Comment extends Component {
 
   likeButton = () => {
     this.props.comment.likes.forEach((like) => {
-      if (like.userId == this.props.user._id) {
+      if (like.userId == this.store.user._id) {
         return this.setState({liked: true})
       }
     })
@@ -156,9 +160,9 @@ class Comment extends Component {
 
             {this.state.showOptions && (
               <View style={style.commentOptions}>
-                {this.props.user._id === this.props.comment.authorId || this.props.user.admin ? (
+                {this.store.user._id === this.props.comment.authorId || this.store.user.admin ? (
                   <>
-                    {this.props.user._id === this.props.comment.authorId ? <Text onPress={() => this.setState({editMode: true, showOptions: false})} style={style.optionText}>Edit</Text> : <Text style={style.optionText}>Member Info</Text>}
+                    {this.store.user._id === this.props.comment.authorId ? <Text onPress={() => this.setState({editMode: true, showOptions: false})} style={style.optionText}>Edit</Text> : <Text style={style.optionText}>Member Info</Text>}
                     <Text onPress={this.deleteComment} style={style.optionText}>Delete</Text>
                   </>
               ) : (

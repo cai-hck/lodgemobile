@@ -1,4 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
+import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 
 class UserStore {
@@ -15,11 +16,20 @@ class UserStore {
               'x-auth': this.token,
             },
           }).then((res) => {
+            this.storeToken(this.token);
             this.user = res.data;
-            
           })
     }
 
+    storeToken = async (value) => {
+        try {
+          await AsyncStorage.setItem('x-auth', value)
+        } catch (e) {
+            alert(e)
+          // saving error
+        }
+    }
+      
     @observable posts = [];
 
     @action getPosts = () => {

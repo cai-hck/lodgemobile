@@ -46,7 +46,7 @@ class App extends Component {
         try {
           const token = res.headers['x-auth'];
           if (token) {
-            AsyncStorage.setItem('x-auth', token).then(() => {
+            this.store.storeToken(token).then(() => {
               this.store.token = token;
 
               this.store.fetchUser();
