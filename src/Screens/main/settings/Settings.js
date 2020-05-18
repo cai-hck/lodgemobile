@@ -6,38 +6,43 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
+import { observer, inject } from 'mobx-react';
 
-import startPublic from '../../startPublicScreen';
 
 import SettingsForm from './SettingsForm';
 import AsyncStorage from '@react-native-community/async-storage';
 
 
 
-
+@inject('userStore')
+@observer
 class Settings extends Component {
+  constructor(props) {
+    super(props)
 
-  static options(passProps) {
-    return {
-      topBar: {
-        visible: true,
-        title: {
-          text: 'Settings',
-          color: '#000'
-        }
-      }
-    };
+    this.store = props.userStore;
   }
 
-  state = {
-    user: this.props.user
-  }
+  // static options(passProps) {
+  //   return {
+  //     topBar: {
+  //       visible: true,
+  //       title: {
+  //         text: 'Settings',
+  //         color: '#000'
+  //       }
+  //     }
+  //   };
+  // }
+
 
   logOut = () => {
     AsyncStorage.removeItem('x-auth').then(() => {
-      startPublic();
+      this.store.token = '';
+      this.store.user = '';
     }).catch(() => {
-      startPublic();
+      this.store.token = '';
+      this.store.user = '';
     })
   }
 
@@ -48,7 +53,7 @@ class Settings extends Component {
           <Text style={style.message}>User Settings</Text>
         </View>
 
-        <SettingsForm user={this.props.user} token={this.props.token} />
+        <SettingsForm user={this.store.user} token={this.store.token} />
         
         <TouchableOpacity style={style.logoutButtonContainer} onPress={this.logOut}>
           <Text style={style.buttonText}>Log Out</Text>

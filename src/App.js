@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AuthScreen from './Screens/authflow/AuthScreen';
 import CreateAnAccount from './Screens/authflow/CreateAnAccount';
 import Dashboard from './Screens/main/Dashboard';
+import MemberRoster from './Screens/main/MemberRoster';
+import Settings from './Screens/main/settings/Settings';
+import ShowAllMedia from './Screens/main/ShowAllMedia';
 
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 @inject('userStore')
 @observer
@@ -31,8 +36,6 @@ class App extends Component {
     try {
       const value = await AsyncStorage.getItem('x-auth');
       if (value !== null) {
-        // We have data!!
-        console.log('data');
         this.store.token = value;
 
         this.store.fetchUser();
@@ -51,9 +54,14 @@ class App extends Component {
           <NavigationContainer>
 
             {this.store.user ? (
-              <Stack.Navigator>
-                <Stack.Screen name="Dashboard" component={Dashboard} />
-              </Stack.Navigator>
+
+              <Tab.Navigator>
+                <Tab.Screen name="Dashboard" component={Dashboard} options={{ title: 'Posts' }} />
+                <Tab.Screen name="Members" component={MemberRoster} />
+                <Tab.Screen name="Photos" component={ShowAllMedia} />
+                <Tab.Screen name="Settings" component={Settings} />
+              </Tab.Navigator>
+
             ) : (
               <Stack.Navigator>
                 <Stack.Screen name="Login" component={AuthScreen} />
