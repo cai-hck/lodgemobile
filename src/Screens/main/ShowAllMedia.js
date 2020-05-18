@@ -8,14 +8,26 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import TappableImage from '../../Components/TappableImage/TappableImage'
+import { observer, inject } from 'mobx-react';
+
 
 const {width, height} = Dimensions.get('screen');
 
+@inject('userStore')
+@observer
 class ShowAllMedia extends Component {
-  state = {
-    user: this.props.user,
-    posts: []
+
+  constructor(props) {
+    super(props)
+
+    this.store = props.userStore;
+    this.state = {
+      user: this.store.user,
+      posts: []
+    }
+  
   }
+
 
   componentDidMount() {
     this.getPosts();
@@ -23,9 +35,9 @@ class ShowAllMedia extends Component {
 
   getPosts = () => {
     const headers = {
-      'x-auth': this.props.token
+      'x-auth': this.store.token
     };
-    if (this.props.token) {
+    if (this.store.token) {
 
       axios.get('https://www.lodge-app.com/api/posts/photos', {headers: headers}).then((res) => {
         let postArray = []
@@ -66,6 +78,7 @@ const style = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    marginTop: 10,
     width: width,
     flexWrap: 'wrap',
   },

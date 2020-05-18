@@ -8,27 +8,33 @@ import {
   TouchableOpacity,
   AsyncStorage,
 } from 'react-native';
-import { Navigation } from 'react-native-navigation';
+import { observer, inject } from 'mobx-react';
+// import { Navigation } from 'react-native-navigation';
 import TappableImage from '../../Components/TappableImage/TappableImage'
 import axios from 'axios';
 
+@inject('userStore')
+@observer
 class MemberRoster extends Component {
   constructor(props) {
     super(props);
-    Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
+
+    this.store = props.userStore;
+
+    // Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
   }
 
   state = {
     members: []
   }
 
-  componentDidAppear() {
+  componentDidMount() {
     this.getRoster()
   }
 
   getRoster = () => {
     const headers = {
-      'x-auth': this.props.token
+      'x-auth': this.store.token
     };
 
     axios.get('https://www.lodge-app.com/api/lodge/roster', {headers: headers}).then((res) => {
