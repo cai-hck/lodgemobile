@@ -46,17 +46,10 @@ class ReplyBox extends Component {
           headers: headers
         }
       ).then((res) => {
-        const details = {
-          alertBody: this.state.content,
-          alertTitle: 'New Post on Lodge App',
-          applicationIconBadgeNumber: 1
-        }
-        IOS.presentLocalNotification(details);
-
         this.props.resetPosts();
         this.props.closeReplyBox();
       }).catch((err) => {
-        alert(err, res.data);
+        alert(err, res);
       })
     } else {
       alert('Please add content to your post.')
