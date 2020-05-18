@@ -87,7 +87,7 @@ class Post extends Component {
 
   likeButton = () => {
     this.props.post.likes.forEach((like) => {
-      if (like.userId == this.store.user._id) {
+      if (like.userId === this.store.user._id) {
         return this.setState({liked: true})
       }
     })
