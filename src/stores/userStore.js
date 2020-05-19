@@ -4,6 +4,9 @@ import axios from 'axios';
 
 class UserStore {
 
+    // @observable env = 'http://localhost:5000';
+    @observable env = 'https://www.lodge-app.com';
+
 
     @observable token = '';
 
@@ -11,7 +14,7 @@ class UserStore {
 
 
     @action fetchUser = () => {
-        axios.get('https://www.lodge-app.com/api/profile', {
+        axios.get(`${this.env}/api/profile`, {
             headers: {
               'x-auth': this.token,
             },
@@ -39,7 +42,7 @@ class UserStore {
 
         if (this.token) {
     
-          axios.get('https://www.lodge-app.com/api/posts/', {headers: headers}).then((res) => {
+          axios.get(`${this.env}/api/posts/`, {headers: headers}).then((res) => {
             let postArray = []
             res.data.forEach((post) => {
               postArray.push(post);

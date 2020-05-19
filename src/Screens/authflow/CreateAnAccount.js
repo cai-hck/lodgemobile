@@ -2,11 +2,22 @@ import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import axios from 'axios';
 import validator from 'validator';
+import { observer, inject } from 'mobx-react';
+
 
 import Input from '../../Components/Input/Input';
 import CustomButton from '../../Components/Button/Button';
 
+@inject('userStore')
+@observer
 class CreateAnAccount extends Component {
+
+  constructor(props) {
+    super(props)
+
+    this.store = this.props.userStore;
+  }
+
   state = {
     email: '',
     password: '',
@@ -39,7 +50,7 @@ class CreateAnAccount extends Component {
     }
 
     if (validator.isEmail(this.state.email) && this.state.password) {
-      axios.post('https://www.lodge-app.com/api/register', {email: this.state.email, password: this.state.password}).then((res) => {
+      axios.post(`${this.store.env}/api/register`, {email: this.state.email, password: this.state.password}).then((res) => {
         if (res.status === 201) {
           this.props.navigation.navigate('Login')
         }

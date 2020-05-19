@@ -41,7 +41,7 @@ class ReplyBox extends Component {
     };
 
     if (this.state.content) {
-      axios.post(`https://www.lodge-app.com/api/posts/${this.props.post._id}/comment/new`, data, 
+      axios.post(`${this.store.env}/api/posts/${this.props.post._id}/comment/new`, data, 
         {
           headers: headers
         }

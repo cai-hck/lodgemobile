@@ -40,7 +40,7 @@ class Comment extends Component {
       'x-auth': this.store.token
     };
 
-    axios.post(`https://www.lodge-app.com/api/comments/${this.props.comment._id}/delete`, {}, {headers: headers} ).then((res) => {
+    axios.post(`${this.store.env}/api/comments/${this.props.comment._id}/delete`, {}, {headers: headers} ).then((res) => {
       this.store.getPosts();
       this.setState({showOptions: false})
     }).catch((err) => {
@@ -53,7 +53,7 @@ class Comment extends Component {
       'x-auth': this.store.token
     };
 
-    axios.post(`https://www.lodge-app.com/api/comments/${this.props.comment._id}/edit`, {content: this.state.content}, {headers: headers} ).then((res) => {
+    axios.post(`${this.store.env}/api/comments/${this.props.comment._id}/edit`, {content: this.state.content}, {headers: headers} ).then((res) => {
       this.store.getPosts();
       this.setState({editMode: false})
     }).catch((err) => {
@@ -68,7 +68,7 @@ class Comment extends Component {
       'x-auth': this.store.token
     };
 
-    axios.post(`https://www.lodge-app.com/api/comments/${this.props.comment._id}/like`, {}, {headers: headers} ).then((res) => {
+    axios.post(`${this.store.env}/api/comments/${this.props.comment._id}/like`, {}, {headers: headers} ).then((res) => {
       this.store.getPosts();
       this.setState({showOptions: false, liked: !this.state.liked})
     }).catch((err) => {

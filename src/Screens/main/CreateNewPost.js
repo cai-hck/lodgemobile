@@ -46,10 +46,10 @@ class CreateNewPost extends Component {
     const data = new FormData();
     if (this.state.photo.uri) {
       data.append("photo", {
-        name: this.state.photo.fileName,
+        name: 'photo',
         type: this.state.photo.type,
         uri:
-          Platform.OS === "android" ? this.state.photo.uri : this.state.photo.uri.replace("file://", "")
+          Platform.OS === "android" ? this.state.photo.uri : this.state.photo.uri
       });  
     }
     
@@ -67,7 +67,7 @@ class CreateNewPost extends Component {
     }
 
     if (this.state.content) {
-      axios.post('https://www.lodge-app.com/api/post/new', data, 
+      axios.post(`${this.store.env}/api/post/new`, data, 
         {
           headers: headers
         }
@@ -77,6 +77,7 @@ class CreateNewPost extends Component {
         this.props.navigation.navigate('Lodge App');
       }).catch((err) => {
         alert(err);
+        this.toggleLoading();
       })
 
     } else {

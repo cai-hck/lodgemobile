@@ -39,7 +39,7 @@ class ShowAllMedia extends Component {
     };
     if (this.store.token) {
 
-      axios.get('https://www.lodge-app.com/api/posts/photos', {headers: headers}).then((res) => {
+      axios.get(`${this.store.env}/api/posts/photos`, {headers: headers}).then((res) => {
         let postArray = []
         res.data.forEach((post) => {
           postArray.push(post);

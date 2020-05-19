@@ -42,7 +42,7 @@ class App extends Component {
 
   loginUser = () => {
     if (this.state.username && this.state.password) {
-      axios.post('https://www.lodge-app.com/api/login', {email: this.state.username, password: this.state.password}).then((res) => {
+      axios.post(`${this.store.env}/api/login`, {email: this.state.username, password: this.state.password}).then((res) => {
         try {
           const token = res.headers['x-auth'];
           if (token) {

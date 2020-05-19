@@ -12,19 +12,30 @@ import {
 import ImagePicker from 'react-native-image-picker'
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
+import { observer, inject } from 'mobx-react';
 
 
+@inject('userStore')
+@observer
 class SettingsForm extends Component {
+
+  constructor(props) {
+    super(props)
+
+    this.store = props.userStore;
+
+    this.state = {
+      email: this.store.user.email,
+      firstName: this.store.user.firstName,
+      lastName: this.store.user.lastName,
+      phone: this.store.user.phone,
+      profilePhoto: this.store.user.profilePhoto,
+      updated: false,
+      loading: false
+    }
   
-  state = {
-    email: this.props.user.email,
-    firstName: this.props.user.firstName,
-    lastName: this.props.user.lastName,
-    phone: this.props.user.phone,
-    profilePhoto: this.props.user.profilePhoto,
-    updated: false,
-    loading: false
   }
+  
 
 
   changeEmail = text => {
@@ -58,6 +69,7 @@ class SettingsForm extends Component {
     }
     ImagePicker.launchImageLibrary(options, response => {
       if (response.uri) {
+        response.fileName = 'profilePhoto'        
         this.setState({ profilePhoto: response })
       }
     })
@@ -77,10 +89,11 @@ class SettingsForm extends Component {
         name: this.state.profilePhoto.fileName,
         type: this.state.profilePhoto.type,
         uri:
-          Platform.OS === "android" ? this.state.profilePhoto.uri : this.state.profilePhoto.uri.replace("file://", "")
+          Platform.OS === "android" ? this.state.profilePhoto.uri : this.state.profilePhoto.uri
       });  
     }
     
+
     const body = {
       email: this.state.email,
       firstName: this.state.firstName,
@@ -91,23 +104,30 @@ class SettingsForm extends Component {
     Object.keys(body).forEach(key => {
       data.append(key, body[key]);
     });
-  
+    console.log(data._parts)
+
     const headers = {
       'x-auth': this.props.token,
       'content-type': 'multipart/form-data'
     }
 
-    axios.post('https://www.lodge-app.com/api/profile/edit', data, 
+    axios.post(`${this.store.env}/api/profile/edit`, data, 
       {
         headers: headers
       }
     ).then((res) => {
+      this.store.getPosts();
       this.setState({
         email: res.data.email,
         firstName: res.data.firstName,
         lastName: res.data.lastName,
         profilePhoto: res.data.profilePhoto ? res.data.profilePhoto : '',
         updated: true,
+        loading: false
+      })
+    }).catch((err) => {
+      alert(err);
+      this.setState({
         loading: false
       })
     })
@@ -165,14 +185,14 @@ class SettingsForm extends Component {
           <View style={style.labelContainer}>
             {this.state.profilePhoto && this.state.profilePhoto.uri && (
               <Image
-                source={{ uri: this.state.profilePhoto.uri }}
+                source={{ uri: `${this.state.profilePhoto.uri}` }}
                 style={{ width: 100, height: 100 }}
               />
             )}
 
             {this.state.profilePhoto && !this.state.profilePhoto.uri && (
               <Image
-                source={{ uri: this.state.profilePhoto }}
+                source={{ uri: `${this.state.profilePhoto}` }}
                 style={{ width: 100, height: 100 }}
               />
             )}

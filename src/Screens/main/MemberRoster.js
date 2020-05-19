@@ -37,7 +37,7 @@ class MemberRoster extends Component {
       'x-auth': this.store.token
     };
 
-    axios.get('https://www.lodge-app.com/api/lodge/roster', {headers: headers}).then((res) => {
+    axios.get(`${this.store.env}/api/lodge/roster`, {headers: headers}).then((res) => {
       this.setState({members: res.data});
     }).catch((err) => {
       this.setState({members: [this.props.user]})

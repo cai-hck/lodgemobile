@@ -50,7 +50,7 @@ class Post extends Component {
       'x-auth': this.store.token
     };
 
-    axios.post(`https://www.lodge-app.com/api/posts/${this.props.post._id}/delete`, {}, {headers: headers} ).then((res) => {
+    axios.post(`${this.store.env}/api/posts/${this.props.post._id}/delete`, {}, {headers: headers} ).then((res) => {
       this.store.getPosts();
       this.setState({showOptions: false})
     }).catch((err) => {
@@ -63,7 +63,7 @@ class Post extends Component {
       'x-auth': this.store.token
     };
 
-    axios.post(`https://www.lodge-app.com/api/posts/${this.props.post._id}/like`, {}, {headers: headers} ).then((res) => {
+    axios.post(`${this.store.env}/api/posts/${this.props.post._id}/like`, {}, {headers: headers} ).then((res) => {
       this.setState({showOptions: false, liked: !this.state.liked})
     }).catch((err) => {
       alert('Something went wrong. Maybe you don\'t have permission to do that.');
@@ -76,7 +76,7 @@ class Post extends Component {
       'x-auth': this.store.token
     };
 
-    axios.post(`https://www.lodge-app.com/api/posts/${this.props.post._id}/edit`, {content: this.state.content}, {headers: headers} ).then((res) => {
+    axios.post(`${this.store.env}/api/posts/${this.props.post._id}/edit`, {content: this.state.content}, {headers: headers} ).then((res) => {
       this.store.getPosts();
       this.setState({editMode: false})
     }).catch((err) => {
